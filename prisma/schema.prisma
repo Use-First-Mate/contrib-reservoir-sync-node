@@ -157,3 +157,14 @@ model transfers {
   created_at DateTime? @db.Timestamp
   updated_at DateTime? @db.Timestamp
 }
+
+model firstmate_collection_id {
+  id                Int     @id @default(autoincrement())
+  firstmate_id      String  @db.Text
+  collection_id     String  @db.Text
+  chain_id          String  @db.Text
+  
+  created_at        DateTime @db.Timestamp
+
+  @@unique([firstmate_id,collection_id,chain_id])
+}
