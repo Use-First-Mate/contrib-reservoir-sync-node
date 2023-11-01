@@ -291,6 +291,9 @@ class _InsertionService {
 
     if (type === "sales") {
       const sale = data as SalesSchema;
+      if (!sale.token.collection.id) {
+        LoggerService.warn(`No collection id for sale ${JSON.stringify(sale, null, 2)}`)
+      }
       return {
         id: Buffer.from(`${sale.txHash}-${sale.logIndex}-${sale.batchIndex}`),
         chain_id: chain,
