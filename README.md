@@ -1,3 +1,9 @@
+<h1>
+  FIRSTMATE ANALYTICS SYNC NODE: develop out of branch firstmate_prod NOT `main`
+</h1>
+
+
+
 <h3 align="center">Reservoir Sync Node</h3>
   <p align="center">
     Reservoir Sync Node is a customizable lightweight indexer based on the Reservoir indexer. It's easy to set up, customizable, and fast. Sync sales and asks continuously into your infrastructure.
