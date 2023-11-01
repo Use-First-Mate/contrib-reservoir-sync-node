@@ -54,6 +54,8 @@ model asks {
   is_dynamic    Boolean?  @db.Boolean
   created_at    DateTime? @db.Timestamp
   updated_at    DateTime? @db.Timestamp
+
+  @@index([collection_id])
 }
 
 model sales {
@@ -89,6 +91,8 @@ model sales {
   price_amount_decimal String? @db.Text
   price_amount_usd     String? @db.Text
   price_amount_native  String? @db.Text
+
+  @@index([collection_id])
 }
 
 model bids {
@@ -138,6 +142,8 @@ model bids {
   is_dynamic    Boolean?  @db.Boolean
   created_at    DateTime? @db.Timestamp
   updated_at    DateTime? @db.Timestamp
+
+  @@index([collection_id])
 }
 
 model transfers {
@@ -167,4 +173,5 @@ model firstmate_collection_id {
   created_at        DateTime @db.Timestamp
 
   @@unique([firstmate_id,collection_id,chain_id])
+  @@index([collection_id])
 }
