@@ -3,13 +3,14 @@ import { Line, Doughnut } from 'react-chartjs-2';
 import useSWR from 'swr';
 import { useEffect, useMemo, useState } from 'react';
 
+const REACT_APP_SERVER_DOMAIN = 'https://reservoir-sync-node-production-bc1e.up.railway.app'
 function App() {
   const [dataType, setDataType] = useState<
     'sales' | 'bids' | 'asks' | 'transfers'
   >('sales');
   const [authorization, setAuthorization] = useState<string>('');
   const { data: blocksDataResponse, mutate: mutateBlocksData } = useSWR(
-    `${process.env.REACT_APP_SERVER_DOMAIN}/sync/queue?type=${dataType}`,
+    `${REACT_APP_SERVER_DOMAIN}/sync/queue?type=${dataType}`,
     null,
     {
       refreshInterval: 10000,
@@ -17,7 +18,7 @@ function App() {
   );
 
   const { data: insertionsData, mutate: mutateInsertions } = useSWR(
-    `${process.env.REACT_APP_SERVER_DOMAIN}/sync/insertions`,
+    `${REACT_APP_SERVER_DOMAIN}/sync/insertions`,
     null,
     {
       refreshInterval: 10000,
