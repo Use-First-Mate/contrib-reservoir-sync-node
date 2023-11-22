@@ -136,34 +136,42 @@ class _InsertionService {
    * @private
    */
   private _filter(type: DataTypes, data: DataSets): DataSets {
-    const contracts = QueueService.contracts[type];
-    const sources = SyncNode.getConfigProperty("syncer")["sources"];
+    const contracts = QueueService.contracts[type].map((c) => c.toLowerCase());
+    const sources = SyncNode.getConfigProperty("syncer")["sources"].map((s) =>
+      s.toLowerCase()
+    );
 
     if (contracts.length === 0 && sources.length === 0) return data;
 
     switch (type) {
       case "transfers":
         return (data as TransfersSchema[]).filter((set) =>
-          contracts.includes(set.token?.contract)
+          contracts.includes(set?.token?.contract?.toLowerCase())
         );
       case "asks":
-        return (data as AsksSchema[]).filter(
-          (set) =>
-            (contracts.length === 0 || contracts.includes(set.contract)) &&
-            (sources.length === 0 || sources.includes(set.source.domain))
-        );
+        return (data as AsksSchema[]).filter((set) => {
+          return (
+            (contracts.length === 0 ||
+              contracts.includes(set?.contract?.toLowerCase())) &&
+            (sources.length === 0 ||
+              sources.includes(set?.source?.domain.toLowerCase()))
+          );
+        });
       case "bids":
-        return (data as BidsSchema[]).filter(
-          (set) =>
-            (contracts.length === 0 || contracts.includes(set.contract)) &&
-            (sources.length === 0 || sources.includes(set.source.domain))
-        );
+        return (data as BidsSchema[]).filter((set) => {
+          return (
+            (contracts.length === 0 ||
+              contracts.includes(set?.contract?.toLowerCase())) &&
+            (sources.length === 0 ||
+              sources.includes(set?.source?.domain.toLowerCase()))
+          );
+        });
       case "sales":
         return (data as SalesSchema[]).filter(
           (set) =>
             (contracts.length === 0 ||
-              contracts.includes(set.token.contract)) &&
-            (sources.length === 0 || sources.includes(set.orderSource))
+              contracts.includes(set?.token?.contract?.toLowerCase())) &&
+            (sources.length === 0 || sources.includes(set?.orderSource))
         );
       default:
         return data;
@@ -201,7 +209,7 @@ class _InsertionService {
           ? addressToBuffer(ask.tokenSetSchemaHash)
           : null,
         contract: addressToBuffer(ask?.contract),
-        collection_id: ask.criteria.data.collection.id,
+        collection_id: ask?.criteria?.data?.collection?.id,
         maker: addressToBuffer(ask?.maker),
         taker: addressToBuffer(ask?.taker),
         price_currency_contract: addressToBuffer(
@@ -252,7 +260,7 @@ class _InsertionService {
         token_set_id: bid?.tokenSetId,
         token_set_schema_hash: addressToBuffer(bid?.tokenSetSchemaHash),
         contract: addressToBuffer(bid?.contract),
-        collection_id: bid.criteria.data.collection.id,
+        collection_id: bid?.criteria?.data?.collection?.id,
         maker: addressToBuffer(bid?.maker),
         taker: addressToBuffer(bid?.taker),
         price_currency_contract: addressToBuffer(
@@ -300,7 +308,7 @@ class _InsertionService {
         sale_id: toBuffer(sale?.saleId),
         token_id: sale.token?.tokenId,
         contract_id: addressToBuffer(sale?.token?.contract),
-        collection_id: sale.token.collection.id,
+        collection_id: sale?.token?.collection?.id,
         order_id: addressToBuffer(sale.orderId),
         order_source: sale.orderSource,
         order_side: sale.orderSide,

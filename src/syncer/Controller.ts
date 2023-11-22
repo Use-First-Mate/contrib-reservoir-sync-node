@@ -280,8 +280,8 @@ export class Controller {
     return {
       id: v4(),
       priority: 1,
-      startDate: reqs[1].data[root][reqs[1].data[root].length - 1].updatedAt,
-      endDate: reqs[0].data[root][reqs[0].data[root].length - 1].updatedAt,
+      startDate: reqs[0].data[root][0].updatedAt,
+      endDate: reqs[1].data[root][0].updatedAt,
       contract: contract || "",
     };
   }
@@ -334,12 +334,21 @@ export class Controller {
       "sortBy=updatedAt",
     ];
 
+    if (params?.contract) {
+      params[
+        this._config.dataset === "sales" || this._config.dataset === "transfers"
+          ? "contract"
+          : "contracts"
+      ] = params?.contract;
+      delete params?.contract;
+    }
+
     if (this._config.dataset === "asks" || this._config.dataset === "bids") {
       isBackfill && queries.push(`status=active`);
     }
 
     if (this._config.dataset === "sales") {
-      queries.push(`includeTokenMetadata=true`)
+      queries.push(`includeTokenMetadata=true`);
     }
 
     Object.keys(params).map((key) => queries.push(`${key}=${params[key]}`));
